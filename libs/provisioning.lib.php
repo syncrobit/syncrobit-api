@@ -1,22 +1,6 @@
 <?php
 class SB_PROVISIONING{
-    public static function checkAuth($key){
-        try {
-            $sql = "SELECT id FROM `auth_keys` WHERE `key` = :a_key";
-            $db = new PDO("mysql:host=".SB_DB_HOST.";dbname=".SB_DB_UNITS, SB_DB_USER, SB_DB_PASSWORD);
-            $statement = $db->prepare($sql);
-            $statement->bindParam(":a_key", $key);
-            $statement->execute();
-
-            return ($statement->rowCount() > 0) ? true : false;
-
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }
-        
-        return false;
-    }
-
+    
     public static function checkIP($key){
         $userIP = SB_WATCHDOG::getUserIP();
 

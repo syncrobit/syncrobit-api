@@ -1,8 +1,8 @@
-<?php
+<?php 
 
-include SB_LIBS."provisioning.lib.php";
+include SB_LIBS."error_report.lib.php";
 
-if(!SB_CORE::unitCheckAuth($_SERVER['HTTP_AUTHORIZATION']) && !SB_PROVISIONING::checkIP($_SERVER['HTTP_AUTHORIZATION'])){
+if(!SB_CORE::unitCheckAuth($_SERVER['HTTP_AUTHORIZATION'])){
     $response['status'] = "Authorization failed";
     http_response_code(401);
 }else{
@@ -10,7 +10,7 @@ if(!SB_CORE::unitCheckAuth($_SERVER['HTTP_AUTHORIZATION']) && !SB_PROVISIONING::
 
     if(SB_WATCHDOG::isJSON($json)){
         $data = json_decode($json, true);
-        if(SB_PROVISIONING::insertUnit($data)){
+        if(SB_ERROR_REP::insertError($data)){
             $response['status'] = "success";
             http_response_code(201);
         }else{
@@ -22,4 +22,3 @@ if(!SB_CORE::unitCheckAuth($_SERVER['HTTP_AUTHORIZATION']) && !SB_PROVISIONING::
         http_response_code(400);
     }
 }
-
