@@ -10,6 +10,7 @@ if(!SB_CORE::unitCheckAuth($_SERVER['HTTP_AUTHORIZATION'])){
 
     if(SB_WATCHDOG::isJSON($json)){
         $data = json_decode($json, true);
+        
         if(SB_ERROR_REP::insertError($data)){
             $response['status'] = "success";
             http_response_code(201);

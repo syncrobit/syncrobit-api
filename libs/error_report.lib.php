@@ -1,4 +1,10 @@
 <?php 
+/**
+ * Copyright (C) SyncroB.it - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Feb 2021
+ */
 
 class SB_ERROR_REP{
     public static function insertError($arr){
