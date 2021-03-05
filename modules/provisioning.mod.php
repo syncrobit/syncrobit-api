@@ -7,15 +7,20 @@ if(!SB_CORE::unitCheckAuth($_SERVER['HTTP_AUTHORIZATION']) && !SB_PROVISIONING::
     http_response_code(401);
 }else{
     $json = file_get_contents('php://input');
-
+    
     if(SB_WATCHDOG::isJSON($json)){
         $data = json_decode($json, true);
-        if(SB_PROVISIONING::insertUnit($data)){
-            $response['status'] = "success";
-            http_response_code(201);
+        if(!SB_PROVISIONING::checkIfRpiSN($data['rpi_sn'])){
+            if(SB_PROVISIONING::insertUnit($data)){
+                $response['status'] = "success";
+                http_response_code(201);
+            }else{
+                $response['status'] = "failed";
+                http_response_code(400);
+            }
         }else{
-            $response['status'] = "failed";
-            http_response_code(400);
+            $response['status'] = "Unit already exists";
+            http_response_code(200);
         }
     }else{
         $response['status'] = "Request not in JSON Format";

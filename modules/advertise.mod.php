@@ -15,11 +15,12 @@ if(!SB_CORE::unitCheckAuth($_SERVER['HTTP_AUTHORIZATION'])){
     if(SB_WATCHDOG::isJSON($json)){
 
         $data = json_decode($json, true);
-        $record_id = SB_ADVERTISE::getRecord($data['rpi_sn']);
-        $ipAddr = str_replace("/24", "", $data['ip_addr']);
+        $ids = SB_ADVERTISE::getRecord($data['rpi_sn']);
+        $ipAddr = (strpos($data['ip_addr_local'], "/") !== false) ? substr($data['ip_addr_local'], 0, strpos($data['ip_addr_local'], "/")) : $data['ip_addr_local'];
+        $vpnIpAddr = (strpos($data['ip_addr_vpn'], "/") !== false) ? substr($data['ip_addr_vpn'], 0, strpos($data['ip_addr_vpn'], "/")) : $data['ip_addr_vpn'];
 
-        if(!$record_id){
-            if(SB_ADVERTISE::insertDbRecord($data['rpi_sn'], $ipAddr)){
+        if(!$ids){
+            if(SB_ADVERTISE::insertDbRecord($data['rpi_sn'], $ipAddr, $vpnIpAddr)){
                 $response['status'] = "success";
                 http_response_code(201);
             }else{
@@ -27,7 +28,7 @@ if(!SB_CORE::unitCheckAuth($_SERVER['HTTP_AUTHORIZATION'])){
                 http_response_code(400);
             }
         }else{
-            if(SB_ADVERTISE::updateDbIP($data['rpi_sn'], $ipAddr, $record_id)){
+            if(SB_ADVERTISE::updateDbIP($data['rpi_sn'], $ipAddr,  $vpnIpAddr, $ids['rID'], $ids['iID'])){
                 $response['status'] = "success";
                 http_response_code(201);
             }else{

@@ -59,10 +59,14 @@ class SB_CORE {
         return false;
     }
 
-    public static function requestURL($uri, $auth, $data){
+    public static function requestURL($uri, $auth, $data, $method = "POST"){
         $ch = curl_init($uri);
 
-        curl_setopt($ch, CURLOPT_POST, 1);
+        if($method == "POST"){
+            curl_setopt($ch, CURLOPT_POST, 1);
+        }elseif($method == "PUT"){
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+        }
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);

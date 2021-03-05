@@ -58,4 +58,22 @@ class SB_PROVISIONING{
         
         return false;
     }
+
+    public static function checkIfRpiSN($rpi_sn){
+        try {
+            $sql = "SELECT * FROM `units` WHERE `rpi_sn` = :rpi_sn";
+            $db = new PDO("mysql:host=".SB_DB_HOST.";dbname=".SB_DB_UNITS, SB_DB_USER, SB_DB_PASSWORD);
+            $statement = $db->prepare($sql);
+            $statement->bindParam(":rpi_sn", $rpi_sn);
+            $statement->execute();
+
+            return ($statement->rowCount() > 0);
+
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+        
+        return false;
+    }
+
 }
