@@ -8,6 +8,8 @@
 
  class SB_ADVERTISE{
     public static function getRecord($rpi_sn){
+        $rpi_sn = sanitize_sql_string($rpi_sn);
+
         try {
             $sql = "SELECT record_id, internal_id FROM `unit_dns` WHERE `rpi_sn` = :rpi_sn";
             $db = new PDO("mysql:host=".SB_DB_HOST.";dbname=".SB_DB_UNITS, SB_DB_USER, SB_DB_PASSWORD);
@@ -30,7 +32,13 @@
     public static function insertDbRecord($rpi_sn, $ipAddr, $vpnIP){
         $record_id = self::createRemoteNS($rpi_sn, $ipAddr);
         $internal_id = self::createInternalNS($rpi_sn, $vpnIP);
-       
+
+        $rpi_sn = sanitize_sql_string($rpi_sn);
+        $ipAddr = sanitize_sql_string($ipAddr);
+        $record_id = sanitize_sql_string($record_id);
+        $vpnIP = sanitize_sql_string($vpnIP);
+        $internal_id = sanitize_sql_string($internal_id);
+
         if($record_id != false || $internal_id != false){
             try {
                 $sql = "INSERT INTO `unit_dns` (`rpi_sn`, `ip`, `vpn_ip`, `record_id`, `internal_id`) 
@@ -54,9 +62,13 @@
     }
 
     public static function updateDbIP($rpi_sn, $ipAddr, $vpnIP, $record_id, $internal_id){
-        $remoteNS = self::updateRemoteNS($record_id, $ipAddr);
+        $remoteNS   = self::updateRemoteNS($record_id, $ipAddr);
         $internalNS = self::updateInternalNS($internal_id, $vpnIP);
-        
+
+        $rpi_sn     = sanitize_sql_string($rpi_sn);
+        $ipAddr     = sanitize_sql_string($ipAddr);
+        $vpnIP      = sanitize_sql_string($vpnIP);
+
         if($remoteNS != false && $internalNS != false){
             try {
                 $sql = "UPDATE `unit_dns` SET `ip` = :ip, `vpn_ip` = :vpn_ip WHERE `rpi_sn` = :rpi_sn";
@@ -116,7 +128,7 @@
         );
 
         $req = json_encode($req);
-        $response = SB_CORE::requestURL($uri, $apiKey, "PUT", $req);
+        $response = SB_CORE::requestURL($uri, $apiKey, $req, "PUT");
         $res_body = json_decode($response['response'], true);
         
         if($response['info']['http_code'] == 200 && !empty($res_body['id'])){
@@ -167,9 +179,9 @@
         );
 
         $req = json_encode($req);
-        $response = SB_CORE::requestURL($uri, $apiKey, "PUT", $req);
+        $response = SB_CORE::requestURL($uri, $apiKey, $req, "PUT");
         $res_body = json_decode($response['response'], true);
-        
+        return $response;
         if($response['info']['http_code'] == 200 && !empty($res_body['id'])){
             return $res_body['id'];
         }

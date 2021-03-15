@@ -11,5 +11,6 @@ include "config.inc.php";
 include SB_LIBS."core.lib.php";
 include SB_LIBS."watchdog.lib.php";
 include SB_LIBS."advertise.lib.php";
+include SB_LIBS."sanitize.lib.php";
 
 $response = array();

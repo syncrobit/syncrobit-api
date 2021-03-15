@@ -37,7 +37,7 @@ class SB_WATCHDOG{
     public static function checkFields($required, $arr){
         $error = false;
         foreach($required as $field) {
-            if (empty($arr[$field])) {
+            if (strlen($arr[$field]) == 0) {
                 $error = true;
             }
         }

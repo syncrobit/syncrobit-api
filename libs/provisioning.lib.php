@@ -10,6 +10,7 @@ class SB_PROVISIONING{
     
     public static function checkIP($key){
         $userIP = SB_WATCHDOG::getUserIP();
+        $key = sanitize_sql_string($key);
 
         try {
             $sql = "SELECT allowed_ip FROM `auth_keys` WHERE `key` = :a_key";
@@ -39,16 +40,22 @@ class SB_PROVISIONING{
             return false;
         }
 
+        $rpi_sn     = sanitize_sql_string($arr['rpi_sn']);
+        $ecc_sn     = sanitize_sql_string($arr['ecc_sn']);
+        $pub_key    = sanitize_sql_string($arr['pub_key']);
+        $eth_mac    = sanitize_sql_string($arr['eth_mac']);
+        $wlan_mac   = sanitize_sql_string($arr['wlan_mac']);
+
         try {
-            $sql = "INSERT INTO `units` (`rpi_sn`, `ecc_sn`, `pub_key`, `eth_mac`, `wlan_mac`)
-                    VALUES (:rpi_sn, :ecc_sn, :pub_key, :eth_mac, :wlan_mac)";
+            $sql = "INSERT INTO `units` (`rpi_sn`, `ecc_sn`, `pub_key`, `eth_mac`, `wlan_mac`, `created_on`)
+                    VALUES (:rpi_sn, :ecc_sn, :pub_key, :eth_mac, :wlan_mac, NOW())";
             $db = new PDO("mysql:host=".SB_DB_HOST.";dbname=".SB_DB_UNITS, SB_DB_USER, SB_DB_PASSWORD);
             $statement = $db->prepare($sql);
-            $statement->bindParam(":rpi_sn", $arr['rpi_sn']);
-            $statement->bindParam(":ecc_sn", $arr['ecc_sn']);
-            $statement->bindParam(":pub_key", $arr['pub_key']);
-            $statement->bindParam(":eth_mac", $arr['eth_mac']);
-            $statement->bindParam(":wlan_mac", $arr['wlan_mac']);
+            $statement->bindParam(":rpi_sn", $rpi_sn);
+            $statement->bindParam(":ecc_sn", $ecc_sn);
+            $statement->bindParam(":pub_key", $pub_key);
+            $statement->bindParam(":eth_mac", $eth_mac);
+            $statement->bindParam(":wlan_mac", $wlan_mac);
             
             return $statement->execute();
 
@@ -60,6 +67,8 @@ class SB_PROVISIONING{
     }
 
     public static function checkIfRpiSN($rpi_sn){
+        $rpi_sn = sanitize_sql_string($rpi_sn);
+
         try {
             $sql = "SELECT * FROM `units` WHERE `rpi_sn` = :rpi_sn";
             $db = new PDO("mysql:host=".SB_DB_HOST.";dbname=".SB_DB_UNITS, SB_DB_USER, SB_DB_PASSWORD);
@@ -68,6 +77,39 @@ class SB_PROVISIONING{
             $statement->execute();
 
             return ($statement->rowCount() > 0);
+
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+        
+        return false;
+    }
+
+    public static function insertAlienUnit($arr){
+        $required = array('rpi_sn', 'pub_key', 'eth_mac', 'wlan_mac', 'swarm_key');
+        if(SB_WATCHDOG::checkFields($required, $arr)){
+            return false;
+        }
+
+        $rpi_sn     = sanitize_sql_string($arr['rpi_sn']);
+        $pub_key    = sanitize_sql_string($arr['pub_key']);
+        $eth_mac    = sanitize_sql_string($arr['eth_mac']);
+        $wlan_mac   = sanitize_sql_string($arr['wlan_mac']);
+        $swarm_key  = sanitize_sql_string($arr['swarm_key']);
+
+        try {
+            $sql = "REPLACE INTO `units` (`rpi_sn`, `pub_key`, `eth_mac`, `wlan_mac`, `diy`, `swarm_key`, `create_on`)
+                    VALUES (:rpi_sn, :pub_key, :eth_mac, :wlan_mac, :diy, :swarm_key, NOW())";
+            $db = new PDO("mysql:host=".SB_DB_HOST.";dbname=".SB_DB_UNITS, SB_DB_USER, SB_DB_PASSWORD);
+            $statement = $db->prepare($sql);
+            $statement->bindParam(":rpi_sn", $rpi_sn);
+            $statement->bindParam(":pub_key", $pub_key);
+            $statement->bindParam(":eth_mac", $eth_mac);
+            $statement->bindParam(":wlan_mac", $wlan_mac);
+            $statement->bindValue(":diy", 1);
+            $statement->bindParam(":swarm_key", $swarm_key);
+
+            return $statement->execute();
 
         } catch (PDOException $e) {
             echo $e->getMessage();

@@ -12,6 +12,8 @@ class SB_CORE {
     }
 
     public static function unitCheckAuth($key){
+        $key = sanitize_sql_string($key);
+
         try {
             $sql = "SELECT id FROM `auth_keys` WHERE `key` = :a_key";
             $db = new PDO("mysql:host=".SB_DB_HOST.";dbname=".SB_DB_UNITS, SB_DB_USER, SB_DB_PASSWORD);
@@ -40,6 +42,8 @@ class SB_CORE {
     }
 
     public static function getSettings($setting_name){
+        $setting_name = sanitize_sql_string($setting_name);
+
         try {
             $sql = "SELECT setting_value FROM `settings` WHERE `setting_name` = :setting_name";
             $db = new PDO("mysql:host=".SB_DB_HOST.";dbname=".SB_DB_UNITS, SB_DB_USER, SB_DB_PASSWORD);
