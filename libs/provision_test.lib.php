@@ -2,12 +2,12 @@
 
 class SB_PROVISION_TEST{
     public static function checkIfUnitExists($rpi_sn){
+        global $msql_db;
         $rpi_sn = sanitize_sql_string($rpi_sn);
 
         try {
             $sql = "SELECT * FROM `unit_tests` WHERE `rpi_sn` = :rpi_sn";
-            $db = new PDO("mysql:host=".SB_DB_HOST.";dbname=".SB_DB_UNITS, SB_DB_USER, SB_DB_PASSWORD);
-            $statement = $db->prepare($sql);
+            $statement = $msql_db->prepare($sql);
             $statement->bindParam(":rpi_sn", $rpi_sn);
             $statement->execute();
 
@@ -21,6 +21,7 @@ class SB_PROVISION_TEST{
     }
 
     public static function insertTestResults($arr){
+        global $msql_db;
         $required = array('rpi_sn', 'eth', 'wlan', 'ble', 'ecc', 'radio');
         if(SB_WATCHDOG::checkFields($required, $arr)){
             return false;
@@ -36,8 +37,7 @@ class SB_PROVISION_TEST{
         try {
             $sql = "INSERT INTO `unit_tests` (`rpi_sn`, `eth`, `wlan`, `ble`, `ecc`, `radio`, `tested_on`)
                     VALUES (:rpi_sn, :eth, :wlan, :ble, :ecc, :radio, NOW())";
-            $db = new PDO("mysql:host=".SB_DB_HOST.";dbname=".SB_DB_UNITS, SB_DB_USER, SB_DB_PASSWORD);
-            $statement = $db->prepare($sql);
+            $statement = $msql_db->prepare($sql);
             $statement->bindParam(":rpi_sn", $rpi_sn);
             $statement->bindParam(":eth", $eth);
             $statement->bindParam(":wlan", $wlan);
@@ -56,6 +56,7 @@ class SB_PROVISION_TEST{
     }
 
     public static function updateTests($arr){
+        global $msql_db;
         $required = array('rpi_sn', 'eth', 'wlan', 'ble', 'ecc', 'radio');
         if(SB_WATCHDOG::checkFields($required, $arr)){
             return false;
@@ -70,8 +71,7 @@ class SB_PROVISION_TEST{
 
         try {
             $sql = "UPDATE `unit_tests` SET `eth` = :eth, `wlan` = :wlan, `ble` = :ble, `ecc` = :ecc, `radio` = :radio, `update_on` = NOW() WHERE `rpi_sn` = :rpi_sn";
-            $db = new PDO("mysql:host=".SB_DB_HOST.";dbname=".SB_DB_UNITS, SB_DB_USER, SB_DB_PASSWORD);
-            $statement = $db->prepare($sql);
+            $statement = $msql_db->prepare($sql);
             $statement->bindParam(":rpi_sn", $rpi_sn);
             $statement->bindParam(":eth", $eth);
             $statement->bindParam(":wlan", $wlan);

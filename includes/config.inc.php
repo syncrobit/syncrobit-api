@@ -17,3 +17,19 @@ define("SB_DB_USER", "syncrobit");
 define("SB_DB_PASSWORD", "m3rt3c123");
 define("SB_DB_DATABASE", "syncrobit");
 define("SB_DB_UNITS", "chameleon");
+
+/** Postgres Credentials */
+define("SB_PG_HOST", "192.168.144.115");
+define("SB_PG_USER", "etl");
+define("SB_PG_PASSWORD", "m3rt3c123");
+define("SB_PG_DATABASE", "etl");
+
+/** Memcached Credentials */
+define("SB_MEMCACHED", "192.168.198.141");
+define("MEMCACHED_SHORT",   3600);
+define("MEMCACHED_MEDIUM",  95200);
+define("MEMCACHED_LONG",    1005200);
+
+//DB Calls
+$pg_db      = new PDO("pgsql:host=".SB_PG_HOST.";port=5432;dbname=".SB_PG_DATABASE.";user=".SB_PG_USER.";password=".SB_PG_PASSWORD);
+$msql_db    = new PDO("mysql:host=".SB_DB_HOST.";dbname=".SB_DB_DATABASE, SB_DB_USER, SB_DB_PASSWORD);

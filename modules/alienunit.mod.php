@@ -18,6 +18,14 @@ if(!SB_CORE::unitCheckAuth($_SERVER['HTTP_AUTHORIZATION'])){
                 $response['status'] = "failed";
                 http_response_code(400);
             } 
+        }else{
+            if(SB_PROVISIONING::updateAlienUnit($data)){
+                $response['status'] = "success";
+                http_response_code(201);
+            }else{
+                $response['status'] = "failed";
+                http_response_code(400);
+            } 
         }
     }else{
         $response['status'] = "Request not in JSON Format";

@@ -8,20 +8,20 @@
 
 class SB_ERROR_REP{
     public static function insertError($arr){
+        global $msql_db;
         $required = array('rpi_sn', 'error', 'reported_by');
         if(SB_WATCHDOG::checkFields($required, $arr)){
             return false;
         }
 
-        $rpi_sn = sanitize_sql_string($arr['rpi_sn']);
-        $error = sanitize_sql_string($arr['error']);
-        $reported_by = sanitize_sql_string($arr['reported_by']);
+        $rpi_sn         = sanitize_sql_string($arr['rpi_sn']);
+        $error          = sanitize_sql_string($arr['error']);
+        $reported_by    = sanitize_sql_string($arr['reported_by']);
         
         try {
             $sql = "INSERT INTO `watchdog` (`rpi_sn`, `error`, `time_stamp`, `reported_by`)
                     VALUES (:rpi_sn, :error, NOW(), :reported_by)";
-            $db = new PDO("mysql:host=".SB_DB_HOST.";dbname=".SB_DB_UNITS, SB_DB_USER, SB_DB_PASSWORD);
-            $statement = $db->prepare($sql);
+            $statement = $msql_db->prepare($sql);
             $statement->bindParam(":rpi_sn", $rpi_sn);
             $statement->bindParam(":error", $error);
             $statement->bindParam(":reported_by", $reported_by);
