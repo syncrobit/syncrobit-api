@@ -12,12 +12,12 @@ class SB_CORE {
     }
 
     public static function unitCheckAuth($key){
-        global $msql_db;
+        global $msqlu_db ;
         $key = sanitize_sql_string($key);
 
         try {
             $sql = "SELECT id FROM `auth_keys` WHERE `key` = :a_key";
-            $statement = $msql_db->prepare($sql);
+            $statement = $msqlu_db->prepare($sql);
             $statement->bindParam(":a_key", $key);
             $statement->execute();
 
@@ -42,12 +42,12 @@ class SB_CORE {
     }
 
     public static function getSettings($setting_name){
-        global $msql_db;
+        global $msqlu_db;
         $setting_name = sanitize_sql_string($setting_name);
 
         try {
             $sql = "SELECT setting_value FROM `settings` WHERE `setting_name` = :setting_name";
-            $statement = $msql_db->prepare($sql);
+            $statement = $msqlu_db->prepare($sql);
             $statement->bindParam(":setting_name", $setting_name);
             $statement->execute();
 

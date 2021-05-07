@@ -8,12 +8,12 @@
 
  class SB_ADVERTISE{
     public static function getRecord($rpi_sn){
-        global $msql_db;
+        global $msqlu_db;
         $rpi_sn = sanitize_sql_string($rpi_sn);
 
         try {
             $sql = "SELECT record_id, internal_id FROM `unit_dns` WHERE `rpi_sn` = :rpi_sn";
-            $statement = $msql_db->prepare($sql);
+            $statement = $msqlu_db->prepare($sql);
             $statement->bindParam(":rpi_sn", $rpi_sn);
             $statement->execute();
 
@@ -30,7 +30,7 @@
     }
 
     public static function insertDbRecord($rpi_sn, $ipAddr, $vpnIP){
-        global $msql_db;
+        global $msqlu_db;
         $record_id      = self::createRemoteNS($rpi_sn, $ipAddr);
         $internal_id    = self::createInternalNS($rpi_sn, $vpnIP);
 
@@ -44,7 +44,7 @@
             try {
                 $sql = "INSERT INTO `unit_dns` (`rpi_sn`, `ip`, `vpn_ip`, `record_id`, `internal_id`) 
                         VALUES (:rpi_sn, :ip, :vpn_ip, :record_id, :internal_id)";
-                $statement = $msql_db->prepare($sql);
+                $statement = $msqlu_db->prepare($sql);
                 $statement->bindParam(":rpi_sn", $rpi_sn);
                 $statement->bindParam(":ip", $ipAddr);
                 $statement->bindParam(":record_id", $record_id);
@@ -62,7 +62,7 @@
     }
 
     public static function updateDbIP($rpi_sn, $ipAddr, $vpnIP, $record_id, $internal_id){
-        global $msql_db;
+        global $msqlu_db;
         $remoteNS   = self::updateRemoteNS($record_id, $ipAddr);
         $internalNS = self::updateInternalNS($internal_id, $vpnIP);
 
@@ -73,7 +73,7 @@
         if($remoteNS != false && $internalNS != false){
             try {
                 $sql = "UPDATE `unit_dns` SET `ip` = :ip, `vpn_ip` = :vpn_ip WHERE `rpi_sn` = :rpi_sn";
-                $statement = $msql_db->prepare($sql);
+                $statement = $msqlu_db->prepare($sql);
                 $statement->bindParam(":rpi_sn", $rpi_sn);
                 $statement->bindParam(":ip", $ipAddr);
                 $statement->bindParam(":vpn_ip", $vpnIP);

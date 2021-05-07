@@ -8,7 +8,7 @@
 
 class SB_ERROR_REP{
     public static function insertError($arr){
-        global $msql_db;
+        global $msqlu_db;
         $required = array('rpi_sn', 'error', 'reported_by');
         if(SB_WATCHDOG::checkFields($required, $arr)){
             return false;
@@ -21,7 +21,7 @@ class SB_ERROR_REP{
         try {
             $sql = "INSERT INTO `watchdog` (`rpi_sn`, `error`, `time_stamp`, `reported_by`)
                     VALUES (:rpi_sn, :error, NOW(), :reported_by)";
-            $statement = $msql_db->prepare($sql);
+            $statement = $msqlu_db->prepare($sql);
             $statement->bindParam(":rpi_sn", $rpi_sn);
             $statement->bindParam(":error", $error);
             $statement->bindParam(":reported_by", $reported_by);
