@@ -27,7 +27,7 @@ class SB_PROVISIONING{
             }
 
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            error_log("PROVISIONING: ". print_r( $e->getMessage(), true ));
         }
         
         return false;
@@ -60,7 +60,7 @@ class SB_PROVISIONING{
             return $statement->execute();
 
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            error_log("PROVISIONING: ". print_r( $e->getMessage(), true ));
         }
         
         return false;
@@ -79,7 +79,7 @@ class SB_PROVISIONING{
             return ($statement->rowCount() > 0);
 
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            error_log("PROVISIONING: ". print_r( $e->getMessage(), true ));
         }
         
         return false;
@@ -113,7 +113,7 @@ class SB_PROVISIONING{
             return $statement->execute();
 
         } catch (PDOException $e) {
-            error_log("ALIEN UNIT: ". $e->getMessage());
+            error_log("PROVISIONING: ". print_r( $e->getMessage(), true ));
         }
         
         return false;
@@ -143,7 +143,7 @@ class SB_PROVISIONING{
             return $statement->execute();
 
         } catch (PDOException $e) {
-            error_log("ALIEN UNIT: ". $e->getMessage());
+            error_log("PROVISIONING: ". print_r( $e->getMessage(), true ));
         }
         
         return false;

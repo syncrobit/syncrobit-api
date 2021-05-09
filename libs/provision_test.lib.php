@@ -14,7 +14,7 @@ class SB_PROVISION_TEST{
             return ($statement->rowCount() > 0);
 
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            error_log( 'PROVISION TEST: ' . print_r( $e->getMessage(), true ) );
         }
         
         return false;
@@ -48,7 +48,7 @@ class SB_PROVISION_TEST{
             return $statement->execute();
 
         } catch (PDOException $e) {
-            error_log( 'API: ' . print_r( $e->getMessage(), true ) );
+            error_log( 'PROVISION TEST: ' . print_r( $e->getMessage(), true ) );
         }
         
         return false;
@@ -82,7 +82,7 @@ class SB_PROVISION_TEST{
             return $statement->execute();
 
         } catch (PDOException $e) {
-            error_log( 'API: ' . print_r( $e->getMessage(), true ) );
+            error_log( 'PROVISION TEST: ' . print_r( $e->getMessage(), true ) );
         }
         
         return false;

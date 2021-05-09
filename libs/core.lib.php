@@ -24,7 +24,7 @@ class SB_CORE {
             return ($statement->rowCount() > 0) ? true : false;
 
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            error_log("CORE: ". print_r( $e->getMessage(), true ));
         }
         
         return false;
@@ -57,7 +57,7 @@ class SB_CORE {
             }
 
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            error_log("CORE: ". print_r( $e->getMessage(), true ));
         }
         
         return false;

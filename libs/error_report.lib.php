@@ -29,7 +29,7 @@ class SB_ERROR_REP{
             return $statement->execute();
 
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            error_log("ERROR REPORT: ". print_r( $e->getMessage(), true ));
         }
     }
 }

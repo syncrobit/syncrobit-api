@@ -23,7 +23,7 @@
             }
 
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            error_log( 'ADVERTISE: ' . print_r( $e->getMessage(), true ) );
         }
 
         return false;
@@ -54,7 +54,7 @@
                 return $statement->execute();
 
             } catch (PDOException $e) {
-                echo $e->getMessage();
+                error_log( 'ADVERTISE: ' . print_r( $e->getMessage(), true ) );
             }
         }
 
@@ -81,7 +81,7 @@
                 return $statement->execute();
 
             } catch (PDOException $e) {
-                echo $e->getMessage();
+                error_log( 'ADVERTISE: ' . print_r( $e->getMessage(), true ) );
             }
         }
         return false;
