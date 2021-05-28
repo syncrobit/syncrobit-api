@@ -46,16 +46,23 @@ class SB_PROVISIONING{
         $pub_key    = sanitize_sql_string($arr['pub_key']);
         $eth_mac    = sanitize_sql_string($arr['eth_mac']);
         $wlan_mac   = sanitize_sql_string($arr['wlan_mac']);
+        $onboarding = sanitize_sql_string($arr['address']);
+        $miner_name = sanitize_sql_string($arr['name']);
+        $sb_sn      = sanitize_sql_string($arr['sb_sn']);
+        
 
         try {
-            $sql = "INSERT INTO `units` (`rpi_sn`, `ecc_sn`, `pub_key`, `eth_mac`, `wlan_mac`, `created_on`)
-                    VALUES (:rpi_sn, :ecc_sn, :pub_key, :eth_mac, :wlan_mac, NOW())";
+            $sql = "INSERT INTO `units` (`rpi_sn`, `ecc_sn`, `pub_key`, `onboard_address`, `miner_name`, `eth_mac`, `wlan_mac`, `sb_sn`, `created_on`)
+                    VALUES (:rpi_sn, :ecc_sn, :pub_key, :onboard_address, :miner_name, :eth_mac, :wlan_mac, :sb_sn, NOW())";
             $statement = $msqlu_db->prepare($sql);
             $statement->bindParam(":rpi_sn", $rpi_sn);
             $statement->bindParam(":ecc_sn", $ecc_sn);
             $statement->bindParam(":pub_key", $pub_key);
             $statement->bindParam(":eth_mac", $eth_mac);
             $statement->bindParam(":wlan_mac", $wlan_mac);
+            $statement->bindParam(":onboard_address", $onboarding);
+            $statement->bindParam(":miner_name", $miner_name);
+            $statement->bindParam(":sb_sn", $sb_sn);
             
             return $statement->execute();
 
@@ -97,10 +104,12 @@ class SB_PROVISIONING{
         $eth_mac    = sanitize_sql_string($arr['eth_mac']);
         $wlan_mac   = sanitize_sql_string($arr['wlan_mac']);
         $swarm_key  = sanitize_sql_string($arr['swarm_key']);
+        $onboarding = sanitize_sql_string($arr['address']);
+        $miner_name = sanitize_sql_string($arr['name']);
 
         try {
-            $sql = "INSERT INTO `units` (`rpi_sn`, `pub_key`, `eth_mac`, `wlan_mac`, `diy`, `swarm_key`, `created_on`)
-                    VALUES (:rpi_sn, :pub_key, :eth_mac, :wlan_mac, :diy, :swarm_key, NOW())";
+            $sql = "INSERT INTO `units` (`rpi_sn`, `pub_key`, `onboard_address`, `miner_name`, `eth_mac`, `wlan_mac`, `diy`, `swarm_key`, `created_on`, `onboarded_hs`)
+                    VALUES (:rpi_sn, :pub_key, :onboard_address, :miner_name, :eth_mac, :wlan_mac, :diy, :swarm_key, NOW(), 1)";
             $db = new PDO("mysql:host=".SB_DB_HOST.";dbname=".SB_DB_UNITS, SB_DB_USER, SB_DB_PASSWORD);
             $statement = $msqlu_db->prepare($sql);
             $statement->bindParam(":rpi_sn", $rpi_sn);
@@ -109,6 +118,8 @@ class SB_PROVISIONING{
             $statement->bindParam(":wlan_mac", $wlan_mac);
             $statement->bindValue(":diy", 1);
             $statement->bindParam(":swarm_key", $swarm_key);
+            $statement->bindParam(":onboard_address", $onboarding);
+            $statement->bindParam(":miner_name", $miner_name);
 
             return $statement->execute();
 
@@ -132,13 +143,16 @@ class SB_PROVISIONING{
         $wlan_mac   = sanitize_sql_string($arr['wlan_mac']);
 
         try {
-            $sql = "UPDATE `units` SET `pub_key` = :pub_key, `eth_mac` = :eth_mac, `wlan_mac` = :wlan_mac, `swarm_key` = :swarm_key WHERE `rpi_sn` = :rpi_sn";
+            $sql = "UPDATE `units` SET `pub_key` = :pub_key, `eth_mac` = :eth_mac, `wlan_mac` = :wlan_mac, `swarm_key` = :swarm_key 
+                    `onboard_address` = :onboard_address, `miner_name` = :miner_name WHERE `rpi_sn` = :rpi_sn";
             $statement = $msqlu_db->prepare($sql);
             $statement->bindParam(":rpi_sn", $rpi_sn);
             $statement->bindParam(":pub_key", $pub_key);
             $statement->bindParam(":eth_mac", $eth_mac);
             $statement->bindParam(":wlan_mac", $wlan_mac);
             $statement->bindParam(":swarm_key", $swarm_key);
+            $statement->bindParam(":onboard_address", $onboarding);
+            $statement->bindParam(":miner_name", $miner_name);
 
             return $statement->execute();
 

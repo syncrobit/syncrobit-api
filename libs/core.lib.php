@@ -87,5 +87,11 @@ class SB_CORE {
         return array("info" => $info, "response" => $output);
     }
 
+    public static function moneyFormat($amount, $decimals = 3, $no_format = 0){
+        if(empty($amount)){
+            return "0.00";
+        }
+        return ($no_format == 0) ? number_format($amount / 100000000, $decimals) : ($amount / 100000000);
+    }
     
 }

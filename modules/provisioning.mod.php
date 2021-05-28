@@ -2,7 +2,7 @@
 
 include SB_LIBS."provisioning.lib.php";
 
-if(!SB_CORE::unitCheckAuth($_SERVER['HTTP_AUTHORIZATION']) && !SB_PROVISIONING::checkIP($_SERVER['HTTP_AUTHORIZATION'])){
+if(!SB_CORE::unitCheckAuth($_SERVER['HTTP_AUTHORIZATION'])){
     $response['status'] = "Authorization failed";
     http_response_code(401);
 }else{
