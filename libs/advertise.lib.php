@@ -42,8 +42,8 @@
 
         if($record_id != false || $internal_id != false){
             try {
-                $sql = "INSERT INTO `unit_dns` (`rpi_sn`, `ip`, `vpn_ip`, `record_id`, `internal_id`) 
-                        VALUES (:rpi_sn, :ip, :vpn_ip, :record_id, :internal_id)";
+                $sql = "INSERT INTO `unit_dns` (`rpi_sn`, `ip`, `vpn_ip`, `record_id`, `internal_id`, `last_updated`) 
+                        VALUES (:rpi_sn, :ip, :vpn_ip, :record_id, :internal_id, NOW())";
                 $statement = $msqlu_db->prepare($sql);
                 $statement->bindParam(":rpi_sn", $rpi_sn);
                 $statement->bindParam(":ip", $ipAddr);
@@ -72,7 +72,7 @@
 
         if($remoteNS != false && $internalNS != false){
             try {
-                $sql = "UPDATE `unit_dns` SET `ip` = :ip, `vpn_ip` = :vpn_ip WHERE `rpi_sn` = :rpi_sn";
+                $sql = "UPDATE `unit_dns` SET `ip` = :ip, `vpn_ip` = :vpn_ip, `last_updated` = NOW() WHERE `rpi_sn` = :rpi_sn";
                 $statement = $msqlu_db->prepare($sql);
                 $statement->bindParam(":rpi_sn", $rpi_sn);
                 $statement->bindParam(":ip", $ipAddr);
