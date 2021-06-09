@@ -22,7 +22,7 @@ class SB_HELIUM{
         global $pg_db;
 
         try{
-            $sql = "SELECT sum(amount) FROM rewards WHERE account = '".$gateway."' 
+            $sql = "SELECT sum(amount) FROM rewards WHERE gateway = '".$gateway."' 
                     AND DATE(to_timestamp(time)) >= DATE((now() - '1 day'::interval))";
 
             $statement = $pg_db->prepare($sql);
@@ -40,7 +40,7 @@ class SB_HELIUM{
         global $pg_db;
 
         try{
-            $sql = "SELECT sum(amount) FROM rewards WHERE account = '".$wallet."' 
+            $sql = "SELECT sum(amount) FROM rewards WHERE gateway = '".$gateway."' 
                     AND DATE(to_timestamp(time)) BETWEEN DATE((now() - '7 day'::interval)) AND DATE((now() - '1 day'::interval))";
 
             $statement = $pg_db->prepare($sql);
@@ -54,11 +54,30 @@ class SB_HELIUM{
            }
     }
 
+    public static function getLatWeekRewards($gateway){
+        global $pg_db;
+
+        try{
+            $sql = "SELECT sum(amount) FROM rewards WHERE gateway = '".$gateway."' 
+                    AND DATE(to_timestamp(time)) BETWEEN DATE((now() - '14 day'::interval)) AND DATE((now() - '7 day'::interval))";
+
+            $statement = $pg_db->prepare($sql);
+            $statement->execute();
+        
+            $row = $statement->fetch(PDO::FETCH_ASSOC);
+            return SB_CORE::moneyFormat($row['sum'], 2);
+
+           }catch (PDOException $e){
+            error_log($e->getMessage());
+           }
+
+    }
+
     public static function get30dRewards($gateway){
         global $pg_db;
 
         try{
-            $sql = "SELECT sum(amount) FROM rewards WHERE account = '".$wallet."' 
+            $sql = "SELECT sum(amount) FROM rewards WHERE gateway = '".$gateway."' 
                     AND DATE(to_timestamp(time)) BETWEEN DATE((now() - '30 day'::interval)) AND DATE((now() - '1 day'::interval))";
 
             $statement = $pg_db->prepare($sql);
@@ -76,7 +95,7 @@ class SB_HELIUM{
         global $pg_db;
 
         try{
-            $sql = "SELECT sum(amount) FROM rewards WHERE account = '".$wallet."' 
+            $sql = "SELECT sum(amount) FROM rewards WHERE gateway = '".$gateway."' 
                     AND DATE(to_timestamp(time)) BETWEEN DATE((now() - '365 day'::interval)) AND DATE((now() - '1 day'::interval))";
 
             $statement = $pg_db->prepare($sql);
@@ -107,5 +126,23 @@ class SB_HELIUM{
         }catch (PDOException $e){
             error_log($e->getMessage());
         }
+    }
+
+    public static function getActivity($gateway){
+        global $pg_db;
+
+        try{
+            $sql = "SELECT r.block, r.time, r.amount, t.type FROM rewards r INNER JOIN transactions t ON r.transaction_hash = t.hash WHERE gateway = '".$gateway."' 
+                    AND DATE(to_timestamp(time)) >= DATE((now() - '1 day'::interval)) LIMIT 10";
+            $statement = $pg_db->prepare($sql);
+            $statement->execute();
+                  
+            $row = $statement->fetchAll(PDO::FETCH_ASSOC);
+            return $row;
+    
+        }catch (PDOException $e){
+            error_log($e->getMessage());
+        }
+
     }
 }

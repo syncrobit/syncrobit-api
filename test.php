@@ -1,9 +1,8 @@
 <?php
 include "includes/initd.inc.php";
+include SB_LIBS."helium.lib.php";
 //include SB_LIBS."provision_test.lib.php";
-echo $_SERVER['HTTP_AUTHORIZATION']."<br>";
-echo SB_WATCHDOG::getUserIP()."<br>";
-var_dump(SB_CORE::unitCheckAuth($_SERVER['HTTP_AUTHORIZATION']));
+
 //var_dump(SB_ADVERTISE::createRemoteNS('11068ec1', '192.168.1.100'));
 
 //var_dump(SB_ADVERTISE::updateRemoveNS('17280897', '192.168.1.99'));
@@ -17,3 +16,4 @@ var_dump(SB_CORE::unitCheckAuth($_SERVER['HTTP_AUTHORIZATION']));
 //var_dump(SB_PROVISION_TEST::insertTestResults($data));
 //$required = array('rpi_sn', 'eth', 'wlan', 'ble', 'ecc', 'radio');
 //var_dump(SB_WATCHDOG::checkFields($required, $data));
+//var_dump(SB_HELIUM::getActivity('112axoWXqxrdT5Gd56iz7Mychkt9UU3EV3d9krTnkrLvodjJRYC2'));
