@@ -44,4 +44,24 @@ class SB_WATCHDOG{
         
         return $error;
     }
+
+    public static function checkIfUnitIsActive($rpi_sn){
+        global $msqlu_db;
+        $rpi_sn = sanitize_sql_string($rpi_sn);
+
+        try {
+            $sql = "SELECT id FROM `unit` WHERE `rpi_sn` = :rpi_sn AND `active` = 1";
+            $statement = $msqlu_db->prepare($sql);
+            $statement->bindParam(":rpi_sn", $rpi_sn);
+            $statement->execute();
+
+           return ($statement->rowCount() > 0) ? true : false;
+
+        } catch (PDOException $e) {
+            error_log( 'WATCHDOG: ' . print_r( $e->getMessage(), true ) );
+        }
+
+        return false;
+
+    }
 }

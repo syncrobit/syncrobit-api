@@ -1,7 +1,7 @@
 <?php 
 
 class SB_HELIUM{
-    public static function getBlockChainHeight(){
+    public static function getBlockChainHeight($format = 1){
         global $pg_db;
 
         try{
@@ -36,7 +36,7 @@ class SB_HELIUM{
            }
     }
 
-    public static function get7dRewards($gateway){
+    public static function get7dRewards($gateway, $format = 1){
         global $pg_db;
 
         try{
@@ -54,7 +54,7 @@ class SB_HELIUM{
            }
     }
 
-    public static function getLatWeekRewards($gateway){
+    public static function getLatWeekRewards($gateway, $format = 0){
         global $pg_db;
 
         try{
@@ -65,7 +65,7 @@ class SB_HELIUM{
             $statement->execute();
         
             $row = $statement->fetch(PDO::FETCH_ASSOC);
-            return SB_CORE::moneyFormat($row['sum'], 2);
+            return SB_CORE::moneyFormat($row['sum'], 2, $format);
 
            }catch (PDOException $e){
             error_log($e->getMessage());
@@ -73,7 +73,7 @@ class SB_HELIUM{
 
     }
 
-    public static function get30dRewards($gateway){
+    public static function get30dRewards($gateway, $format = 0){
         global $pg_db;
 
         try{
@@ -84,14 +84,14 @@ class SB_HELIUM{
             $statement->execute();
                   
             $row = $statement->fetch(PDO::FETCH_ASSOC);
-            return SB_CORE::moneyFormat($row['sum'], 2);
+            return SB_CORE::moneyFormat($row['sum'], 2, $format);
     
         }catch (PDOException $e){
             error_log($e->getMessage());
         }
     }
 
-    public static function get365dRewards($gateway){
+    public static function get365dRewards($gateway, $format = 0){
         global $pg_db;
 
         try{
@@ -102,7 +102,7 @@ class SB_HELIUM{
             $statement->execute();
                   
             $row = $statement->fetch(PDO::FETCH_ASSOC);
-            return SB_CORE::moneyFormat($row['sum'], 2);
+            return SB_CORE::moneyFormat($row['sum'], 2, $format);
     
         }catch (PDOException $e){
             error_log($e->getMessage());
@@ -128,7 +128,7 @@ class SB_HELIUM{
         }
     }
 
-    public static function getActivity($gateway){
+    public static function getActivity($gateway, $format = 0){
         global $pg_db;
 
         try{
