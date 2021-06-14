@@ -50,12 +50,31 @@ class SB_WATCHDOG{
         $rpi_sn = sanitize_sql_string($rpi_sn);
 
         try {
-            $sql = "SELECT id FROM `unit` WHERE `rpi_sn` = :rpi_sn AND `active` = 1";
+            $sql = "SELECT id FROM `units` WHERE `rpi_sn` = :rpi_sn AND `active` = 1";
             $statement = $msqlu_db->prepare($sql);
             $statement->bindParam(":rpi_sn", $rpi_sn);
             $statement->execute();
 
-           return ($statement->rowCount() > 0) ? true : false;
+           return ($statement->rowCount() > 0);
+
+        } catch (PDOException $e) {
+            error_log( 'WATCHDOG: ' . print_r( $e->getMessage(), true ) );
+        }
+
+        return false;
+    }
+
+    public static function checkMinerAddress($addr){
+        global $msqlu_db;
+        $addr = sanitize_sql_string($addr);
+
+        try {
+            $sql = "SELECT id FROM `units` WHERE `onboard_address` = :addr";
+            $statement = $msqlu_db->prepare($sql);
+            $statement->bindParam(":addr", $addr);
+            $statement->execute();
+
+           return ($statement->rowCount() > 0);
 
         } catch (PDOException $e) {
             error_log( 'WATCHDOG: ' . print_r( $e->getMessage(), true ) );

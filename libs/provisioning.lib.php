@@ -78,7 +78,7 @@ class SB_PROVISIONING{
         $rpi_sn = sanitize_sql_string($rpi_sn);
 
         try {
-            $sql = "SELECT * FROM `units` WHERE `rpi_sn` = :rpi_sn";
+            $sql = "SELECT id FROM `units` WHERE `rpi_sn` = :rpi_sn";
             $statement = $msqlu_db->prepare($sql);
             $statement->bindParam(":rpi_sn", $rpi_sn);
             $statement->execute();

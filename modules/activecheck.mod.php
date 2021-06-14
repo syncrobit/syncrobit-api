@@ -10,7 +10,8 @@ if(!SB_CORE::unitCheckAuth($_SERVER['HTTP_AUTHORIZATION'])){
     if(SB_WATCHDOG::isJSON($json)){
         $data = json_decode($json, true);
 
-        if(SB_PROVISIONING::checkIfRpiSN($data['rpi_sn']) && SB_WATCHDOG::checkIfUnitIsActive($data['rpi_sn'])){
+        if(SB_PROVISIONING::checkIfRpiSN($data['rpi_sn']) && SB_WATCHDOG::checkIfUnitIsActive($data['rpi_sn'])
+           && SB_WATCHDOG::checkMinerAddress($data['miner_address'])){
             $response['status'] = "success";
             http_response_code(202);
         }else{
@@ -18,9 +19,8 @@ if(!SB_CORE::unitCheckAuth($_SERVER['HTTP_AUTHORIZATION'])){
             http_response_code(404);
         }
         
-
-        
     }else{
         $response['status'] = "Request not in JSON Format";
         http_response_code(400);  
     }
+}
