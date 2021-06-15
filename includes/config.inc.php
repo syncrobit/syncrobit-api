@@ -25,7 +25,8 @@ define("SB_PG_PASSWORD", "m3rt3c123");
 define("SB_PG_DATABASE", "etl");
 
 /** Memcached Credentials */
-define("SB_MEMCACHED", "192.168.198.141");
+define("SB_MEMCACHED", "memcached.local");
+define("MEMCACHED_30",      1800);
 define("MEMCACHED_SHORT",   3600);
 define("MEMCACHED_MEDIUM",  95200);
 define("MEMCACHED_LONG",    1005200);

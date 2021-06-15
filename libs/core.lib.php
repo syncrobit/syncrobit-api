@@ -93,5 +93,20 @@ class SB_CORE {
         }
         return ($no_format == 0) ? number_format($amount / 100000000, $decimals) : ($amount / 100000000);
     }
+
+    public static function memCachedAdd($key, $value, $time){
+        $memcache = new Memcache;
+        $memcache->connect(SB_MEMCACHED, 11211) or die ("Could not connect");
+        $memcache->set($key, $value, false, $time);
+
+        return $value;
+    }
+
+    public static function memCachedGet($key){
+        $memcache = new Memcache;
+        $memcache->connect(SB_MEMCACHED, 11211) or die ("Could not connect");
+
+        return $memcache->get($key);
+    }
     
 }
